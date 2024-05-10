@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { useState, useEffect } from 'react';
+import { Text, View, StyleSheet, Alert } from 'react-native';
 import NumberContainer from '../components/game/NumberContainer';
+import PrimaryButton from '../components/ui/PrimaryButton';
 import Title from '../components/ui/Title';
 
 function generateRandomBetween(min, max, exclude) {
@@ -13,14 +14,57 @@ function generateRandomBetween(min, max, exclude) {
   }
 }
 
-function GameScreen({ userNumber }) {
+let minBoundary = 1;
+let maxBoundary = 100;
+
+function GameScreen({ userNumber, gameOverHandler }) {
   const initialGusess = generateRandomBetween(1, 100, userNumber);
-  const [cureentGuess, setCurrentGuess] = useState('22');
+  const [cureentGuess, setCurrentGuess] = useState(initialGusess);
+
+  useEffect(() => {
+    if (cureentGuess === userNumber) {
+      gameOverHandler();
+    }
+  }, [cureentGuess, userNumber, gameOverHandler]);
+
+  function nextGuessHandler(direction) {
+    if (
+      (direction === 'lower' && cureentGuess < userNumber) ||
+      (direction === 'greater' && cureentGuess > userNumber)
+    ) {
+      Alert.alert("Don't lie, You know that this is wrong...");
+      return;
+    }
+
+    if (direction === 'lower') {
+      maxBoundary = cureentGuess;
+    } else {
+      minBoundary = cureentGuess + 1;
+    }
+    const newRandomNumber = generateRandomBetween(
+      minBoundary,
+      maxBoundary,
+      cureentGuess
+    );
+    setCurrentGuess(newRandomNumber);
+  }
+
   return (
     <View style={styles.screen}>
       <Title>Opponet's Guess</Title>
 
       <NumberContainer>{cureentGuess}</NumberContainer>
+      <View>
+        <Text>Higher or lower?</Text>
+        <View>
+          <PrimaryButton onPress={() => nextGuessHandler('greater')}>
+            +
+          </PrimaryButton>
+          <PrimaryButton onPress={() => nextGuessHandler('lower')}>
+            -
+          </PrimaryButton>
+        </View>
+      </View>
 
       <View>
         <Text>Log Rounds </Text>
