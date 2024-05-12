@@ -1,3 +1,8 @@
+/**
+ * Global App color
+ *  List of colors used in the app
+ */
+
 const Colors = {
   primary500: '#72063c',
   primary600: '#640233',
