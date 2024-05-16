@@ -26,7 +26,6 @@ function StartGameScreen({ pickNumber }) {
       ]);
       return;
     }
-
     pickNumber(chosenNumber);
   }
 
