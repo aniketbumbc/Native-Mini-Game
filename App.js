@@ -1,25 +1,47 @@
 import { StyleSheet, View, ImageBackground } from 'react-native';
-import { useFont } from 'expo-font';
 import StartGameScreen from './screens/StartGameScreen';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import GameScreen from './screens/GameScreen';
 import GameOverScreen from './screens/GameOverScreen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Colors from './constant/colors';
-import AppLoading from 'expo-app-loading';
+import * as Font from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
 
 export default function App() {
   const [userNumber, setUserNumber] = useState(null);
   const [gameOver, setGameOver] = useState(true);
+  const [appIsReady, setAppIsReady] = useState(false);
 
-  const [fontLoaded] = useFont({
+  const fontsLoading = {
     'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
-    'open-sans-bold': require('./assets/fonts/OpenSans-Regular.ttf'),
-  });
+    'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
+  };
 
-  if (!fontLoaded) {
-    return <AppLoading />;
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+        await Font.loadAsync(fontsLoading);
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setAppIsReady(true);
+      }
+    }
+
+    prepare();
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+
+  if (!appIsReady) {
+    return null;
   }
 
   function pickNumber(pickedNumber) {
@@ -47,6 +69,7 @@ export default function App() {
     <LinearGradient
       colors={[Colors.primary700, Colors.accent500]}
       style={styles.rootScreen}
+      onLayout={onLayoutRootView}
     >
       <ImageBackground
         source={require('./assets/images/background.png')}

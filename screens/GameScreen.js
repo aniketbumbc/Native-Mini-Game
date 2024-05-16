@@ -54,7 +54,7 @@ function GameScreen({ userNumber, gameOverHandler }) {
 
   return (
     <View style={styles.screen}>
-      <Title>Opponet's Guess</Title>
+      <Title>Opponent's Guess</Title>
 
       <NumberContainer>{cureentGuess}</NumberContainer>
       <Card>
