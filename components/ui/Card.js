@@ -1,18 +1,31 @@
-import { View, StyleSheet } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  useWindowDimensions,
+} from 'react-native';
 import Colors from '../../constant/colors';
 function Card({ children }) {
-  return <View style={styles.card}>{children}</View>;
+  const { width, height } = useWindowDimensions();
+  const orientationWidth = width < 400 ? 36 : 200;
+
+  return (
+    <View style={[styles.card, { marginHorizontal: orientationWidth }]}>
+      {children}
+    </View>
+  );
 }
 
 export default Card;
+
+const deviceWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   card: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 36,
+    marginTop: deviceWidth < 380 ? 18 : 24,
     padding: 16,
-    marginHorizontal: 24,
     backgroundColor: Colors.primary800,
     borderRadius: 8,
     elevation: 4,
