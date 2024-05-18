@@ -1,5 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Alert, FlatList } from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Alert,
+  FlatList,
+  useWindowDimensions,
+} from 'react-native';
 import NumberContainer from '../components/game/NumberContainer';
 import Card from '../components/ui/Card';
 import InstrctionText from '../components/ui/InstrcutionText';
@@ -25,6 +32,8 @@ function GameScreen({ userNumber, gameOverHandler, setGuessRoundApp }) {
   const initialGusess = generateRandomBetween(1, 100, userNumber);
   const [cureentGuess, setCurrentGuess] = useState(initialGusess);
   const [guessRound, setGuessRound] = useState([initialGusess]);
+
+  const { width, height } = useWindowDimensions();
 
   useEffect(() => {
     if (cureentGuess === userNumber) {
@@ -63,10 +72,8 @@ function GameScreen({ userNumber, gameOverHandler, setGuessRoundApp }) {
 
   const guessRoundListLength = guessRound.length;
 
-  return (
-    <View style={styles.screen}>
-      <Title>Opponent's Guess</Title>
-
+  let content = (
+    <>
       <NumberContainer>{cureentGuess}</NumberContainer>
       <Card>
         <InstrctionText style={styles.instructionText}>
@@ -98,6 +105,48 @@ function GameScreen({ userNumber, gameOverHandler, setGuessRoundApp }) {
           keyExtractor={(itemData) => itemData}
         />
       </View>
+    </>
+  );
+
+  if (width > 400) {
+    content = (
+      <>
+        {/* <InstrctionText style={styles.instructionText}>
+          Higher or lower?
+        </InstrctionText> */}
+        <View stye={styles.buttonContainerWide}>
+          <View style={styles.buttonContainer}>
+            <PrimaryButton onPress={() => nextGuessHandler('greater')}>
+              <Ionicons name='add-circle' size={24} color='white' />
+            </PrimaryButton>
+          </View>
+          <NumberContainer>{cureentGuess}</NumberContainer>
+          <View style={styles.buttonContainer}>
+            <PrimaryButton onPress={() => nextGuessHandler('lower')}>
+              <Ionicons name='remove-circle' size={24} color='white' />
+            </PrimaryButton>
+          </View>
+        </View>
+      </>
+    );
+  }
+
+  return (
+    <View style={styles.screen}>
+      <Title>Opponent's Guess</Title>
+      {content}
+      <View style={styles.listContainer}>
+        <FlatList
+          data={guessRound}
+          renderItem={(item) => (
+            <GuessLogItem
+              roundNumber={guessRoundListLength - item.index}
+              guess={item.item}
+            />
+          )}
+          keyExtractor={(itemData) => itemData}
+        />
+      </View>
     </View>
   );
 }
@@ -117,10 +166,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   instructionText: {
-    marginBottom: 15,
+    marginBottom: 12,
   },
   listContainer: {
     flex: 1,
     padding: 16,
+  },
+  buttonContainerWide: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });

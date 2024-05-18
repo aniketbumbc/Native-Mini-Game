@@ -13,6 +13,8 @@ export default NumberContainer;
 
 const deviceWidth = Dimensions.get('window').width;
 
+console.log('deviceWidth', deviceWidth);
+
 const styles = StyleSheet.create({
   container: {
     borderWidth: 4,
