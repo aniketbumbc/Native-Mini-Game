@@ -77,10 +77,6 @@ function StartGameScreen({ pickNumber }) {
 
 export default StartGameScreen;
 
-//const deviceHeight = Dimensions.get('window').height;
-
-//console.log('deviceHeight', deviceHeight);
-
 const styles = StyleSheet.create({
   screen: {
     flex: 1,

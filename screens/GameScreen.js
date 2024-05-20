@@ -108,8 +108,6 @@ function GameScreen({ userNumber, gameOverHandler, setGuessRoundApp }) {
     </>
   );
 
-  console.log('width', width);
-
   if (width > 400) {
     const marginHorizontal = 70;
     const instructionTextMargin = 10;
