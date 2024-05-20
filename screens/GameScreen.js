@@ -93,7 +93,7 @@ function GameScreen({ userNumber, gameOverHandler, setGuessRoundApp }) {
         </View>
       </Card>
 
-      <View style={styles.listContainer}>
+      {/* <View style={styles.listContainer}>
         <FlatList
           data={guessRound}
           renderItem={(item) => (
@@ -104,24 +104,43 @@ function GameScreen({ userNumber, gameOverHandler, setGuessRoundApp }) {
           )}
           keyExtractor={(itemData) => itemData}
         />
-      </View>
+      </View> */}
     </>
   );
 
+  console.log('width', width);
+
   if (width > 400) {
+    const marginHorizontal = 70;
+    const instructionTextMargin = 10;
+
     content = (
       <>
-        {/* <InstrctionText style={styles.instructionText}>
+        <InstrctionText
+          style={[styles.instructionText, { marginTop: instructionTextMargin }]}
+        >
           Higher or lower?
-        </InstrctionText> */}
-        <View stye={styles.buttonContainerWide}>
-          <View style={styles.buttonContainer}>
+        </InstrctionText>
+        <View style={styles.buttonContainerWide}>
+          <View
+            style={[
+              styles.buttonContainer,
+              { marginHorizontal: marginHorizontal },
+            ]}
+          >
             <PrimaryButton onPress={() => nextGuessHandler('greater')}>
               <Ionicons name='add-circle' size={24} color='white' />
             </PrimaryButton>
           </View>
+
           <NumberContainer>{cureentGuess}</NumberContainer>
-          <View style={styles.buttonContainer}>
+
+          <View
+            style={[
+              styles.buttonContainer,
+              { marginHorizontal: marginHorizontal },
+            ]}
+          >
             <PrimaryButton onPress={() => nextGuessHandler('lower')}>
               <Ionicons name='remove-circle' size={24} color='white' />
             </PrimaryButton>
@@ -130,12 +149,18 @@ function GameScreen({ userNumber, gameOverHandler, setGuessRoundApp }) {
       </>
     );
   }
-
+  const marginTopDistance = width < 400 ? 120 : 10;
+  const marginHorizontalList = width < 400 ? 0 : 190;
   return (
-    <View style={styles.screen}>
+    <View style={[styles.screen, { marginTop: marginTopDistance }]}>
       <Title>Opponent's Guess</Title>
       {content}
-      <View style={styles.listContainer}>
+      <View
+        style={[
+          styles.listContainer,
+          { marginHorizontal: marginHorizontalList },
+        ]}
+      >
         <FlatList
           data={guessRound}
           renderItem={(item) => (
@@ -156,8 +181,8 @@ export default GameScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    padding: 35,
-    marginTop: 100,
+    padding: 15,
+    alignItems: 'center',
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -173,7 +198,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   buttonContainerWide: {
+    flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
   },
 });
